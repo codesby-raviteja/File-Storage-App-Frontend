@@ -1,1 +1,1 @@
-export const URL = "http://18.205.233.145/filestorage" 
+export const URL = "https://file-storage-app-three.vercel.app" 
