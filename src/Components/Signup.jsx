@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 import { Link } from "react-router-dom"
+import { URL } from "../constants"
 
-const URL = "http://localhost:5000"
+
 
 function FormPage() {
   const [formData, setFormData] = useState({

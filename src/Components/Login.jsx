@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react"
 import { userContext } from "../Context/userContext"
 import { Link, useNavigate } from "react-router-dom"
+import { URL } from "../constants"
 
-const URL = "http://localhost:5000"
+
 
 const LoginComponent = () => {
   

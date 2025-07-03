@@ -1,5 +1,5 @@
-import { Fragment, useContext, useEffect, useRef, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { useContext, useEffect, useRef, useState } from "react"
+import {  useNavigate, useParams } from "react-router-dom"
 import { userContext } from "./Context/userContext"
 import DriveHeader from "./Components/Header"
 import Drive from "./Components/Drive"
@@ -7,8 +7,8 @@ import FileRenameModal from "./Components/FileRenameModel"
 import DirRenamModel from "./Components/DirRenamModel"
 import CreateNewDirModel from "./Components/CreateNewDirModel"
 import UploadDialogueBox from "./Components/UploadingDialogBox.jsx"
+import { URL } from "./constants.js"
 
-const URL = "http://localhost:5000" //Enter your  localhost
 
 // const URL = "http://localhost/"
 
