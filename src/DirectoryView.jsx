@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import {  useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { userContext } from "./Context/userContext"
 import DriveHeader from "./Components/Header"
 import Drive from "./Components/Drive"
@@ -10,7 +10,6 @@ import UploadDialogueBox from "./Components/UploadingDialogBox.jsx"
 import { URL } from "./constants.js"
 
 
-// const URL = "http://localhost/"
 
 function DirectoryView() {
   const params = useParams()
@@ -83,7 +82,7 @@ function DirectoryView() {
 
     const [currentFile, ...leftOver] = Que
 
-    const uploadURL = URL + `/file/upload/${directoryId}`
+    const uploadURL = URL + `/file/upload/${directoryId ? directoryId : ""}`
     const xhr = new XMLHttpRequest()
     xhr.open("POST", uploadURL, true)
     xhr.withCredentials = true
@@ -262,9 +261,6 @@ function DirectoryView() {
   }
 
   const filesInput = useRef()
-
-  
-
 
   return (
     <>

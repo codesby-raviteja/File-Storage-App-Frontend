@@ -9,7 +9,7 @@ const LoginComponent = () => {
   
   const [formData, setFormData] = useState({
     email: "ravi@admin.com",
-    password: "Raviteja",
+    password: "raviteja",
   })
 
   const navigate = useNavigate()
