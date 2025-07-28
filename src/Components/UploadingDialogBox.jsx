@@ -1,20 +1,22 @@
-import React from "react"
+import React from "react";
 
 const UploadDialogueBox = ({ filesToBeUploaded, setIsOpenUploadModel }) => {
-  const noOfFilesUploaded = filesToBeUploaded.filter((f) => f.isUploaded).length
+  const noOfFilesUploaded = filesToBeUploaded.filter(
+    (f) => f.isUploaded
+  ).length;
 
   return (
-    <div className="w-full max-w-lg absolute bottom-0 right-5 nn  overflow-hidden     shadow-lg rounded-lg ">
+    <div className="w-full max-w-[90%]  sm:max-w-lg absolute bottom-0  right-2 sm:right-5   overflow-hidden     shadow-lg rounded-lg ">
       {/* {HEADING PART} */}
       <div className="p-4 bg-gray-200 flex justify-between items-center">
         <h3 className="text-lg font-semibold px-2">
-          {noOfFilesUploaded}/{filesToBeUploaded.length}uploads complete
+          {noOfFilesUploaded}/{filesToBeUploaded.length} uploads completed
         </h3>
 
-        <div className="flex space-x-3 items-center">
+        <div className="flex space-x-3 items-center ">
           {/* Close Icon */}
           <button
-            className="text-gray-600 hover:text-red-600 text-xl"
+            className="text-gray-600 hover:text-red-600 text-xl cursor-pointer"
             onClick={() => setIsOpenUploadModel(false)}
           >
             <svg
@@ -75,7 +77,7 @@ const UploadDialogueBox = ({ filesToBeUploaded, setIsOpenUploadModel }) => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default UploadDialogueBox
+export default UploadDialogueBox;

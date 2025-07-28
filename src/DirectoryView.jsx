@@ -1,67 +1,66 @@
-import { useContext, useEffect, useRef, useState } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { userContext } from "./Context/userContext"
-import DriveHeader from "./Components/Header"
-import Drive from "./Components/Drive"
-import FileRenameModal from "./Components/FileRenameModel"
-import DirRenamModel from "./Components/DirRenamModel"
-import CreateNewDirModel from "./Components/CreateNewDirModel"
-import UploadDialogueBox from "./Components/UploadingDialogBox.jsx"
-import { URL } from "./constants.js"
-
-
+import { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { userContext } from "./Context/userContext";
+import DriveHeader from "./Components/Header";
+import Drive from "./Components/Drive";
+import FileRenameModal from "./Components/FileRenameModel";
+import DirRenamModel from "./Components/DirRenamModel";
+import CreateNewDirModel from "./Components/CreateNewDirModel";
+import UploadDialogueBox from "./Components/UploadingDialogBox.jsx";
+import { URL } from "./constants.js";
 
 function DirectoryView() {
-  const params = useParams()
+  const params = useParams();
 
-  const directoryId = params["id"]
+  const directoryId = params["id"];
 
-  const [directoryData, setDirectoryData] = useState()
+  const [directoryData, setDirectoryData] = useState({});
 
   //RENAME THE FILE / DIRECTORY
-  const [reName, setRename] = useState({ id: null, filename: "" })
-  const [isRenameEnabled, setIsRenameEnabled] = useState(false)
-  const [isDirRenameEnabled, setIsDirRenameEnabled] = useState(false)
+  const [reName, setRename] = useState({ id: null, filename: "" });
+  const [isRenameEnabled, setIsRenameEnabled] = useState(false);
+  const [isDirRenameEnabled, setIsDirRenameEnabled] = useState(false);
 
   //Creating Dir
-  const [newDirectoryName, setNewDirectoryName] = useState("New Folder")
-  const [createDirModel, setCreateDirModel] = useState(false)
+  const [newDirectoryName, setNewDirectoryName] = useState("New Folder");
+  const [createDirModel, setCreateDirModel] = useState(false);
 
   //Handling Upload
-  const [filesToBeUploaded, setFilesToBeUploaded] = useState([])
-  const [openUploadModel, setIsOpenUploadModel] = useState(false)
+  const [filesToBeUploaded, setFilesToBeUploaded] = useState([]);
+  const [openUploadModel, setIsOpenUploadModel] = useState(false);
 
   //Handling Deletion
-  const [deleteDetails, setDeleteDetails] = useState({ type: "", id: "" })
+  const [deleteDetails, setDeleteDetails] = useState({ type: "", id: "" });
 
-  const [user, setUser] = useContext(userContext)
-  const navigate = useNavigate()
+  const [user, setUser] = useContext(userContext);
 
-  const [openUserProfile, setOpenUserProfile] = useState(false)
+  const navigate = useNavigate();
+
+  const [openUserProfile, setOpenUserProfile] = useState(false);
 
   //HANDLIG ERROR'S
   //Fetching files Error
-  const [error, setError] = useState("")
+  const [error, setError] = useState("");
   //creating new Dir Error
-  const [dirErr, setDirErr] = useState("")
+  const [dirErr, setDirErr] = useState("");
 
   useEffect(() => {
-    getFiles()
-  }, [directoryId])
+    getFiles();
+  }, [directoryId]);
 
   useEffect(() => {
     const handleGlobalClick = () => {
-      setOpenUserProfile(false)
-    }
-    window.addEventListener("click", handleGlobalClick)
+      setOpenUserProfile(false);
+    };
+    window.addEventListener("click", handleGlobalClick);
     return () => {
-      window.removeEventListener("click", handleGlobalClick)
-    }
-  }, [])
+      window.removeEventListener("click", handleGlobalClick);
+    };
+  }, []);
 
   //UPLOADING FILE
   const handleUpload = async (e) => {
-    const files = Array.from(e.target.files)
+    const files = Array.from(e.target.files);
 
     const filesToUpload = files.map((file) => ({
       id: `${file.name}-${new Date()}`,
@@ -69,58 +68,59 @@ function DirectoryView() {
       file,
       isUploaded: false,
       progress: 0,
-    }))
-    setFilesToBeUploaded(filesToUpload)
-    setIsOpenUploadModel(true)
-    UploadFiles(filesToUpload)
-  }
+    }));
+    setFilesToBeUploaded(filesToUpload);
+    setIsOpenUploadModel(true);
+    UploadFiles(filesToUpload);
+  };
 
   const UploadFiles = (Que) => {
     if (Que.length === 0) {
-      return console.log("Files OVER")
+      return console.log("Files OVER");
     }
 
-    const [currentFile, ...leftOver] = Que
+    const [currentFile, ...leftOver] = Que;
 
-    const uploadURL = URL + `/file/upload/${directoryId ? directoryId : ""}`
-    const xhr = new XMLHttpRequest()
-    xhr.open("POST", uploadURL, true)
-    xhr.withCredentials = true
-    xhr.setRequestHeader("filename", currentFile.name)
+    const uploadURL = URL + `/file/upload/${directoryId ? directoryId : ""}`;
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", uploadURL, true);
+    xhr.withCredentials = true;
+    xhr.setRequestHeader("filename", currentFile.name);
     xhr.addEventListener("load", (event) => {
       setFilesToBeUploaded((prev) => {
         return prev.map((f) => {
           if (f.id === currentFile.id) {
-            return { ...f, isUploaded: true }
+            return { ...f, isUploaded: true };
           }
-          return f
-        })
-      })
+          return f;
+        });
+      });
 
       xhr.onerror = () => {
-        console.error("Error uploading file:", xhr.statusText)
-      }
-      UploadFiles(leftOver)
-      getFiles()
-    })
+        console.error("Error uploading file:", xhr.statusText);
+      };
+      UploadFiles(leftOver);
+      getFiles();
+    });
+
     xhr.upload.addEventListener("progress", (event) => {
-      const loaded = (event.loaded / event.total) * 100
+      const loaded = (event.loaded / event.total) * 100;
       setFilesToBeUploaded((prev) => {
         return prev.map((f) => {
           if (f.id === currentFile.id) {
-            return { ...f, progress: loaded }
+            return { ...f, progress: loaded };
           }
-          return f
-        })
-      })
-    })
-    xhr.send(currentFile.file)
-  }
+          return f;
+        });
+      });
+    });
+    xhr.send(currentFile.file);
+  };
 
   // UPDATING FileNAME
   const updateRename = async () => {
     if (!reName.filename) {
-      return alert("fileName cannot be Empty")
+      return alert("fileName cannot be Empty");
     }
     const res = await fetch(URL + `/file/${reName.id}`, {
       method: "PATCH",
@@ -129,29 +129,29 @@ function DirectoryView() {
       },
       body: JSON.stringify({ newFileName: reName.filename }),
       credentials: "include",
-    })
-    const data = await res.text()
+    });
+    const data = await res.text();
 
-    console.log(data)
-    getFiles()
-    setIsRenameEnabled(false)
-    setRename({ id: "", filename: "" })
-  }
+    console.log(data);
+    getFiles();
+    setIsRenameEnabled(false);
+    setRename({ id: "", filename: "" });
+  };
   //DELETing FILE
   const handleDelete = async (id) => {
     const res = await fetch(URL + `/file/${id}`, {
       method: "DELETE",
       credentials: "include",
-    })
-    const data = await res.json()
-    getFiles()
-  }
+    });
+    const data = await res.json();
+    getFiles();
+  };
 
   //Creating Directory
   const handleCreateDirectory = async () => {
     try {
       if (!newDirectoryName) {
-        return alert("Directory Name connot be empty")
+        return alert("Directory Name connot be empty");
       }
 
       const res = await fetch(
@@ -162,23 +162,23 @@ function DirectoryView() {
           body: JSON.stringify({ newDirectoryName }),
           credentials: "include",
         }
-      )
-      const { status, error, message } = await res.json()
+      );
+      const { status, error, message } = await res.json();
       if (status === 403) {
-        throw new Error(error)
+        throw new Error(error);
       }
-      getFiles()
-      console.log("HEKKIW")
-      setNewDirectoryName("")
-      setCreateDirModel(false)
+      getFiles();
+
+      setNewDirectoryName("");
+      setCreateDirModel(false);
     } catch (error) {
-      setDirErr(error.message)
+      setDirErr(error.message);
     }
-  }
+  };
   //Updating Directory Name
   const updateDirRename = async () => {
     if (!reName.filename) {
-      return alert("fileName/FolderName cannot be Empty")
+      return alert("fileName/FolderName cannot be Empty");
     }
     const res = await fetch(URL + `/directory/${reName.id}`, {
       method: "PATCH",
@@ -187,13 +187,13 @@ function DirectoryView() {
       },
       body: JSON.stringify({ newDirName: reName.filename }),
       credentials: "include",
-    })
-    const data = await res.text()
+    });
+    const data = await res.text();
 
-    getFiles()
-    setIsDirRenameEnabled(false)
-    setRename({ id: "", filename: "" })
-  }
+    getFiles();
+    setIsDirRenameEnabled(false);
+    setRename({ id: "", filename: "" });
+  };
 
   //READING DIRECTORY
   const getFiles = async () => {
@@ -203,49 +203,51 @@ function DirectoryView() {
         {
           credentials: "include",
         }
-      )
+      );
 
-      const { status, data, error } = await res.json()
+      const { status, data, error } = await res.json();
       if (status === 401) {
-        throw new Error(error)
+        throw new Error(error);
       }
 
-      if (status === 403) setError(error)
-      setDirectoryData(data)
+      if (status === 403) setError(error);
+
+      setDirectoryData(data);
     } catch (error) {
-      navigate("/login")
+      console.log(error);
+      navigate("/login");
     }
-  }
+  };
 
   //Deleting Directory
   const handleDirDelete = async (dirId) => {
     const res = await fetch(URL + `/directory/${dirId}`, {
       method: "DELETE",
       credentials: "include",
-    })
-    const data = await res.json()
-    getFiles()
-  }
+    });
+    const data = await res.json();
+    getFiles();
+  };
 
   function getFileIcon(filename) {
-    const ext = filename.split(".").pop().toLowerCase()
+    const ext = filename.split(".").pop().toLowerCase();
     switch (ext) {
       case "pdf":
-        return "pdf"
+        return "pdf";
       case "png":
       case "jpg":
       case "jpeg":
       case "gif":
-        return "image"
+        return "image";
       case "mp4":
       case "mov":
       case "avi":
-        return "video"
+        return "video";
       case "zip":
       case "rar":
       case "tar":
       case "gz":
-        return "archive"
+        return "archive";
       case "js":
       case "jsx":
       case "ts":
@@ -254,13 +256,13 @@ function DirectoryView() {
       case "css":
       case "py":
       case "java":
-        return "code"
+        return "code";
       default:
-        return "alt"
+        return "alt";
     }
   }
 
-  const filesInput = useRef()
+  const filesInput = useRef();
 
   return (
     <>
@@ -274,7 +276,7 @@ function DirectoryView() {
           setOpenUserProfile={setOpenUserProfile}
           disabled={
             error &&
-            error == "Folder does not exists or you do not have access to it !"
+            error == "Directory does not exists or you do not have access to it !"
           }
         />
         {/* {DriveComponent} */}
@@ -331,7 +333,7 @@ function DirectoryView() {
         )}
       </div>
     </>
-  )
+  );
 }
 
-export default DirectoryView
+export default DirectoryView;

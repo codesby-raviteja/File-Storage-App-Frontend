@@ -1,7 +1,7 @@
-import { FaFolderPlus, FaUpload, FaUser } from "react-icons/fa"
-import UserProfile from "./UserProfile"
-import { useEffect, useState } from "react"
-import { URL } from "../constants"
+import { FaFolderPlus, FaUpload, FaUser } from "react-icons/fa";
+import UserProfile from "./UserProfile";
+import { useEffect, useState } from "react";
+import { URL } from "../constants";
 
 const DriveHeader = ({
   setCreateDirModel,
@@ -12,37 +12,30 @@ const DriveHeader = ({
   openUserProfile,
   setOpenUserProfile,
 }) => {
-  const [userDetails, setUserDetails] = useState({ name: "", email: "" })
+  const [userDetails, setUserDetails] = useState({ name: "", email: "" });
 
-
-
-
-
-
-
-  useEffect(()=>{
-    if(!disabled){
-      console.log("disabled =>", disabled)
-      getUserDetails()
+  useEffect(() => {
+    if (!disabled) {
+      console.log("disabled =>", disabled);
+      getUserDetails();
     }
-  },[])
-
+  }, []);
 
   const handleOpenProfile = (e) => {
-    e.stopPropagation()
-    setOpenUserProfile((prev) => !prev)
-  }
+    e.stopPropagation();
+    setOpenUserProfile((prev) => !prev);
+  };
 
   const getUserDetails = async () => {
     const res = await fetch(URL + "/user", {
       credentials: "include",
-    })
+    });
 
-    const { data, status } = await res.json()
+    const { data, status } = await res.json();
     if (status === 200) {
-      setUserDetails(data)
+      setUserDetails(data);
     }
-  }
+  };
 
   return (
     <div className="flex relative justify-between items-center px-2 py-4 border-b">
@@ -52,9 +45,9 @@ const DriveHeader = ({
       <div className="flex space-x-6">
         <button
           title="Create Folder"
-          className="text-blue-600 hover:text-blue-800 text-2xl cursor-pointer disabled:text-blue-300"
+          className="text-blue-600 hover:text-blue-800 text-2xl cursor-pointer disabled:text-blue-300 disabled:cursor-not-allowed"
           onClick={() => {
-            setCreateDirModel(true)
+            setCreateDirModel(true);
           }}
           disabled={disabled}
         >
@@ -62,7 +55,7 @@ const DriveHeader = ({
         </button>
         <button
           title="Upload File"
-          className="text-blue-600 hover:text-blue-800 text-2xl cursor-pointer disabled:text-blue-300"
+          className="text-blue-600 hover:text-blue-800 text-2xl cursor-pointer disabled:text-blue-300 disabled:cursor-not-allowed"
           onClick={() => filesInput.current.click()}
           disabled={disabled}
         >
@@ -70,9 +63,9 @@ const DriveHeader = ({
         </button>
         <button
           title="Upload File"
-          className="text-blue-600 hover:text-blue-800 text-2xl cursor-pointer disabled:text-blue-300"
+          className="text-blue-600 hover:text-blue-800 text-2xl cursor-pointer "
           onClick={handleOpenProfile}
-          disabled={disabled}
+          // disabled={disabled}
         >
           <FaUser />
         </button>
@@ -87,7 +80,7 @@ const DriveHeader = ({
         {openUserProfile && <UserProfile userDetails={userDetails} />}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DriveHeader
+export default DriveHeader;

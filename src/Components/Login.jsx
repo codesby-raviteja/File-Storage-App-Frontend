@@ -1,29 +1,26 @@
-import React, { useContext, useState } from "react"
-import { userContext } from "../Context/userContext"
-import { Link, useNavigate } from "react-router-dom"
-import { URL } from "../constants"
-
-
+import React, { useContext, useState } from "react";
+import { userContext } from "../Context/userContext";
+import { Link, useNavigate } from "react-router-dom";
+import { URL } from "../constants";
 
 const LoginComponent = () => {
-  
   const [formData, setFormData] = useState({
-    email: "ravi@admin.com",
-    password: "raviteja",
-  })
+    email: "raviteja@gmail.com",
+    password: "abcd",
+  });
 
-  const navigate = useNavigate()
-  const [user, setUser] = useContext(userContext)
+  const navigate = useNavigate();
+  const [user, setUser] = useContext(userContext);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const response = await fetch(URL + "/login", {
         method: "POST",
@@ -34,17 +31,17 @@ const LoginComponent = () => {
 
         body: JSON.stringify(formData),
         credentials: "include",
-      })
+      });
 
-      const { status, data, error } = await response.json()
+      const { status, data, error } = await response.json();
       if (status !== 200) {
-        throw new Error(error)
+        throw new Error(error);
       }
-      navigate("/")
+      navigate("/");
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200">
@@ -90,6 +87,6 @@ const LoginComponent = () => {
         </p>
       </form>
     </div>
-  )
-}
-export default LoginComponent
+  );
+};
+export default LoginComponent;
