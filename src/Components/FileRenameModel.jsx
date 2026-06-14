@@ -9,7 +9,7 @@ const RenameModal = ({
   const inputRef = useRef()
 
   useEffect(() => {
-    const [fileName, format] = reName.filename.split(".")
+    const [fileName, format] = reName.fileName.split(".")
 
     inputRef.current.focus()
 
@@ -27,9 +27,9 @@ const RenameModal = ({
           ref={inputRef}
           type="text"
           className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={reName.filename}
+          value={reName.fileName}
           onChange={(e) =>
-            setRename((prev) => ({ ...prev, filename: e.target.value }))
+            setRename((prev) => ({ ...prev, fileName: e.target.value }))
           }
         />
         <div className="mt-4 flex justify-end gap-2">

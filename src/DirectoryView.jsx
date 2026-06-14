@@ -8,6 +8,7 @@ import DirRenamModel from "./Components/DirRenamModel";
 import CreateNewDirModel from "./Components/CreateNewDirModel";
 import UploadDialogueBox from "./Components/UploadingDialogBox.jsx";
 import { URL } from "./constants.js";
+import axios from "axios";
 
 function DirectoryView() {
   const params = useParams();
@@ -17,7 +18,7 @@ function DirectoryView() {
   const [directoryData, setDirectoryData] = useState({});
 
   //RENAME THE FILE / DIRECTORY
-  const [reName, setRename] = useState({ id: null, filename: "" });
+  const [reName, setRename] = useState({ id: null, fileName: "" });
   const [isRenameEnabled, setIsRenameEnabled] = useState(false);
   const [isDirRenameEnabled, setIsDirRenameEnabled] = useState(false);
 
@@ -73,7 +74,7 @@ function DirectoryView() {
     setIsOpenUploadModel(true);
     UploadFiles(filesToUpload);
   };
-
+  //UPLOADING call
   const UploadFiles = (Que) => {
     if (Que.length === 0) {
       return console.log("Files OVER");
@@ -86,6 +87,7 @@ function DirectoryView() {
     xhr.open("POST", uploadURL, true);
     xhr.withCredentials = true;
     xhr.setRequestHeader("filename", currentFile.name);
+    // xhr.setReHeader("x-tenanat-Id", "TENANAT-001");
     xhr.addEventListener("load", (event) => {
       setFilesToBeUploaded((prev) => {
         return prev.map((f) => {
@@ -119,7 +121,7 @@ function DirectoryView() {
 
   // UPDATING FileNAME
   const updateRename = async () => {
-    if (!reName.filename) {
+    if (!reName.fileName) {
       return alert("fileName cannot be Empty");
     }
     const res = await fetch(URL + `/file/${reName.id}`, {
@@ -127,7 +129,7 @@ function DirectoryView() {
       headers: {
         "Content-Type": "Application/json",
       },
-      body: JSON.stringify({ newFileName: reName.filename }),
+      body: JSON.stringify({ newFileName: reName.fileName }),
       credentials: "include",
     });
     const data = await res.text();
@@ -135,7 +137,7 @@ function DirectoryView() {
     console.log(data);
     getFiles();
     setIsRenameEnabled(false);
-    setRename({ id: "", filename: "" });
+    setRename({ id: "", fileName: "" });
   };
   //DELETing FILE
   const handleDelete = async (id) => {
@@ -161,7 +163,7 @@ function DirectoryView() {
           headers: { "Content-Type": "Application/json" },
           body: JSON.stringify({ newDirectoryName }),
           credentials: "include",
-        }
+        },
       );
       const { status, error, message } = await res.json();
       if (status === 403) {
@@ -202,7 +204,7 @@ function DirectoryView() {
         URL + `/directory/${directoryId ? directoryId : ""}`,
         {
           credentials: "include",
-        }
+        },
       );
 
       const { status, data, error } = await res.json();
@@ -276,7 +278,8 @@ function DirectoryView() {
           setOpenUserProfile={setOpenUserProfile}
           disabled={
             error &&
-            error == "Directory does not exists or you do not have access to it !"
+            error ==
+              "Directory does not exists or you do not have access to it !"
           }
         />
         {/* {DriveComponent} */}

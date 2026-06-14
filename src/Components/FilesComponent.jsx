@@ -1,6 +1,5 @@
 import React from "react";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import { Link } from "react-router-dom";
 import { URL } from "../constants";
 
 function FilesComponent({
@@ -19,7 +18,7 @@ function FilesComponent({
   return (
     <div className="space-y-2">
       {directoryData
-        ? directoryData.files.map(({ _id: id, filename }) => {
+        ? directoryData.files.map(({ _id: id, fileName }) => {
             return (
               <div
                 key={id}
@@ -29,8 +28,8 @@ function FilesComponent({
                   onClick={() => navigateToFiles(id)}
                   className="flex grow space-x-2 items-center"
                 >
-                  <span>{renderFileIcon(getFileIcon(filename))}</span>
-                  <span>{filename}</span>
+                  <span>{renderFileIcon(getFileIcon(fileName))}</span>
+                  <span>{fileName}</span>
                 </div>
                 <button
                   className="cursor-pointer hover:bg-gray-100"
@@ -39,7 +38,7 @@ function FilesComponent({
                       isDirectory: false,
                       isContextMenuOpen: true,
                     });
-                    setRename({ id, filename });
+                    setRename({ id, fileName });
                     setDeleteDetails({ type: "file", id });
                     handleContextCoord(e);
                   }}
